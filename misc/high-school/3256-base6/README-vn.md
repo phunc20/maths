@@ -1,4 +1,12 @@
 ## 2020/10/12 (月)
+```math
+
+(3256)_{10} = 3\cdot{10}^3 + 2\cdot{10}^2 + 5\cdot{10}^1 + 6\cdot{10}^0
+```
+
+
+
+
 Tối hôm qua Na hỏi tôi một bài toán học; Na đang học lớp 11, cái bài này là như thế này
 > Nếu chúng ta chỉ được phép sử dụng 6 chữ số từ tập $\{1,2,3,4,5,6\}$, thì có thể tạo ra bao nhiêu con số gồm 4 chữ số (chữ số được phép lặp lại) nhỏ hơn $3256$ (i.e. $< 3256$)?
 
@@ -23,7 +31,7 @@ Một khi chuyển qua hệ thổng `base6` như vậy chúng ta có thể nhậ
 
 **Rmk.** Nếu bạn đọc không hiểu cái gì là `base6` hoặc `base10`, thì có thể tạm bỏ qua phần này; hoặc là tôi sẽ đăng thêm một bài viết về nó vào thời điểm sau. Thật ra, tụi nó cũng khá đơn giản:
 - $(2145)_6 = 2\cdot6^3 + 1\cdot6^2 + 4\cdot6^1 + 5\cdot6^0$
-- $(3256)_{10} = 3\cdot{10}^3 + 2\cdot{10}^2 + 5\cdot{10}^1 + 6\cdot{10}^0$
+- $`(3256)_{10} = 3\cdot{10}^3 + 2\cdot{10}^2 + 5\cdot{10}^1 + 6\cdot{10}^0`$
 
 
 ### Ý tưởng 02
