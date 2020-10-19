@@ -11,6 +11,9 @@
 
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 \newcommand{\twonorm}[1]{\left\lVert#1\right\rVert_{2}}
+\renewcommand\qedsymbol{$\blacksquare$}
+\newtheorem*{theorem}{Theorem}
+\newtheorem*{axiom}{Axiom}
 
 \title{$p\,$-norm of matrices}
 \author{phunc20}
@@ -44,6 +47,7 @@ chúng ta có thể định nghĩa ra $\norm{A}$ sao cho $\norm{A\mathbf{x}} \st
 
 %Tiếp theo chúng ta sẽ đi kiểm ví dụ ngược/trốn lại cái đẳng thức ở trên. Nếu kiểm không được mình sẽ đi chứng minh nó.
 Một counter-example có thể hướng dẫn chúng ta:
+%\begin{proof}
 \begin{Spiel}
   %Consider the following matrix and vectors with the standard $2$-norm in $\mathbb{R}$\\
 	Xét ma trận $A$ và vectơ $\mathbf{x_1}, \mathbf{x_2}$ như sau
@@ -74,12 +78,14 @@ Một counter-example có thể hướng dẫn chúng ta:
 	Từ ví dụ này chúng ta có thể nhìn ra $\norm{A\mathbf{x}} \stackrel{?}{=} \norm{A}\cdot\norm{\mathbf{x}}$ \textbf{không khá thi}. Bởi vì nếu như đẳng thức có thật, thì 
   $$
 	  \begin{aligned}
-			& \norm{A \mathbf{x_1}}_{2} = 5 \implies \norm{A}_{2} = 5 \\
-			& \norm{A \mathbf{x_2}}_{2} = 13 \implies \norm{A}_{2} = 13 \\
-			& \qquad\qquad\qquad \rightarrow\!\leftarrow
+			\norm{A \mathbf{x_1}}_{2} = 5 &\implies \norm{A}_{2} = 5 \\
+			\norm{A \mathbf{x_2}}_{2} = 13 &\implies \norm{A}_{2} = 13 \\
+			\qquad\qquad\qquad \rightarrow\!\leftarrow\; &\text{(Contradiction)}
 	  \end{aligned}
   $$
+  \hfill\qedsymbol
 \end{Spiel}
+%\end{proof}
 
 Nếu vậy sẽ rất hợp lý cho chúng ta chuyển sang một mục tiêu yếu hơn, đó là
 $$
@@ -98,6 +104,77 @@ Chúng ta dĩ nhiên sẽ hỏi:
 Tập $\left\{\frac{\norm{A\mathbf{x}}}{\norm{\mathbf{x}}} \;|\; \mathbf{x} \in \mathbb{C}^n \setminus \mathbf{0}\right\}$ có bị chặn ở trên không?
 
 
+Quan sát hàm $\mathbf{x} \mapsto \frac{\norm{A\mathbf{x}}}{\norm{\mathbf{x}}},\; \mathbf{x} \in \mathbb{C}^n \setminus \{\mathbf{0}\}.$ Chúng ta có
+
+$$
+%\begin{equation}
+	%\forall\; c \in \mathbb{R}^{+} \setminus \{0\},
+	\forall\; c \in \mathbb{R}^{+},\;
+	c\mathbf{x} \mapsto \frac{\norm{A(c\mathbf{x})}}{\norm{c\mathbf{x}}} = 
+  \frac{c\norm{A\mathbf{x}}}{c\norm{\mathbf{x}}} =
+  \frac{\norm{A\mathbf{x}}}{\norm{\mathbf{x}}}.
+%\end{equation}
+$$
+
+Từ cái này chúng ta rút ra một kết quả nhỏ, đó là
+
+$$
+  % Set LHS of an equation
+  \left\{ \frac{\norm{A\mathbf{x}}}{\norm{\mathbf{x}}} \vert\;
+	\mathbf{x} \in \mathbb{C}^n \setminus \{\mathbf{0}\} \right\} =
+  % Set RHS of an equation
+  \left\{ \frac{\norm{A\mathbf{x}}}{\norm{\mathbf{x}}} \vert\;
+	\mathbf{x} \in \mathbb{C}^n \text{and} \norm{\mathbf{x}} = 1 \right\}.
+	%\{ \frac{\norm{A\mathbf{x}}}{\norm{\mathbf{x}}} |\;
+	%\mathbf{x} \in \mathbb{C}^n \text{and} \norm{\mathbf{x}} = 1 \} 
+$$
+
+Điều này có nghĩa là
+\textbf{
+	chúng ta chỉ cần chứng minh rằng hàm
+  $\mathbf{x} \mapsto \frac{\norm{A\mathbf{x}}}{\norm{\mathbf{x}}}$
+	được chặn ở trên khi $\mathbf{x}$ thuộc về unit circle
+	$\left\{\mathbf{x} \in \mathbb{C}^n \vert \norm{\mathbf{x}} = 1\right\}$
+}.
+
+Để chứng minh điều này, tôi sẽ sử dụng một kết quả nổi tiếng và cơ bản trong toán phân tích. [Rmk. nếu sau này tôi biết về một phương pháp nào đó còn đơn giản hơn nữa thì tôi sẽ lại đây update; nếu các bạn nào chưa có học qua về cái kết quả này và thắc mắc về nó, có thể thăm khảo blahblahblah] 
+
+\begin{theorem}
+If $f: K \subset \mathbb{C}^n \to \mathbb{R}$ is continuous and $K$ is closed and bounded, (i.e. compact)
+then $f(K)$ is also closed and bounded.
+\end{theorem}
+
+If the norm $\norm{\cdot}$ is a continuous function (in particular, all the $p$-norms are continuous), then our function $\mathbf{x} \mapsto \frac{\norm{A\mathbf{x}}}{\norm{\mathbf{x}}}$ is clearly continuous and the unit circle is closed and bounded, whence the set in question is bounded (both above and below).
+
+
+\begin{axiom}
+	If $\,\forall A \subset \mathbb{R}$ that is bounded above, there exists $a \in \mathbb{R}$ s.t. $\forall\, \text{upper bound}\;\, u\; \text{of}\; A$ we have $a \le u$; in other words, the \textit{least upper bound} of $A$ exists.
+\end{axiom}
+
+
+Tổng lại, chúng ta đã nhận ra:\newline
+với đa số norm, it is legitimate to define 
+$$
+  \norm{A}
+	\,\,\coloneqq\!\!
+	\sup_{\mathbf{x} \,\in\, {\mathbb{C}^{n} \setminus \{\mathbf{0}\}}} \frac{\norm{A\mathbf{x}}}{\norm{\mathbf{x}}}\;
+	= 
+	%\sup_{\mathbf{x} \,\in\, {\mathbb{C}^{n} \setminus \{\mathbf{0}\}}} \norm{A\mathbf{x}}
+	\sup_{\left\{\mathbf{x} \in \mathbb{C}^n \vert \norm{\mathbf{x}} = 1\right\}} \norm{A\mathbf{x}}
+$$
+
+
+
+
+
+
+
+
+
+
+
+
+
 \begin{wrapfigure}{p}{0.5\textwidth}
 \includegraphics[width=0.4\textwidth]{01-motivation.jpg}
 %\includegraphics[width=2.5cm]{01-motivation.jpg}
@@ -107,28 +184,18 @@ Tập $\left\{\frac{\norm{A\mathbf{x}}}{\norm{\mathbf{x}}} \;|\; \mathbf{x} \in 
 \begin{wrapfigure}{h}{0.5\textwidth}
 \includegraphics[width=0.4\textwidth]{02-moti_cont.jpg}
 \end{wrapfigure}
-\blindtext
 
 
-\blindtext
+%\blindtext
 
 %\includegraphics[width=0.7\textwidth]{01-motivation.jpg}
 %\includegraphics[width=0.7\textwidth]{02-moti_cont.jpg}
-%\includegraphics[width=0.7\textwidth]{03-2norm_and_singular_value.jpg}
-%\includegraphics[width=0.7\textwidth]{04-max_instead.jpg}
+\includegraphics[width=0.4\textwidth]{03-2norm_and_singular_value.jpg}
+\includegraphics[width=0.4\textwidth]{04-max_instead.jpg}
 
 \end{document}
 
 
 
 
-
-%   01-motivation.jpg
-%   02-moti_cont.jpg
-%   03-2norm_and_singular_value.jpg
-%   04-max_instead.jpg
-%   covariance.jpg
-%   decompression.jpg
-%   motivation.tex
-%   vietnamese.tex
 
