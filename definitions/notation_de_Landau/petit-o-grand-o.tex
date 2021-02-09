@@ -1,0 +1,73 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+%\usepackage[T1]{fontenc}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  filecolor=magenta,
+  urlcolor=cyan,
+}
+
+
+\newtheorem*{definition*}{Definition}
+\newtheorem*{property*}{Property}
+\newcommand\sbullet[1][.5]{\mathbin{\vcenter{\hbox{\scalebox{#1}{$\bullet$}}}}}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\DeclarePairedDelimiter{\abs}{|}{|}
+
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  filecolor=magenta,      
+  urlcolor=cyan,
+}
+
+
+
+\author{phunc20}
+\title{Backprop: A Simple Case}
+%\date{21 January, 2022}
+%\date{January 22, 2022}
+\date{January 21, 2021}
+
+\begin{document}
+
+%\maketitle
+%\tableofcontents
+
+%\begin{abstract}
+%\end{abstract}
+
+\section{Notation de Landau}
+Soient $E$ et $F$ deux espace normés sur le corps $\mathbb{K} = \mathbb{R}$ ou $\mathbb{C}$
+et $R: E \to F$ une application quelconque. On dit
+\begin{itemize}
+  \item $R(h)$ est un petit $o$ de norme de $h$ puissance $k$, écrit $R(h) = o(\lVert h \rVert^{k}),$ si
+    %$\forall \epsilon > 0 \exists \delta > 0$
+    pour tout $\epsilon > 0$ il existe $\delta > 0$ tel que
+    $$
+      \lVert h \rVert_{E} < \delta \quad\text{entraîne}\quad \lVert R(h) \rVert_{F} \le \epsilon \lVert h \rVert_{E}^{k}
+    $$
+
+  \item $R(h)$ est un grand $O$ de norme de $h$ puissance $k$, écrit $R(h) = O(\lVert h \rVert^{k}),$
+    s'il existe $C > 0$ et $\delta > 0$ tels que
+    $$
+      \lVert h \rVert_{E} < \delta \quad\text{entraîne}\quad \lVert R(h) \rVert_{F} \le C \lVert h \rVert_{E}^{k}
+    $$
+\end{itemize}
+
+En particulier, on a $R(h) = o(\lVert h \rVert^{k}) \implies R(h) = O(\lVert h \rVert^{k})\,.$ (Parce qu'il
+suffit de choisir n'importe quel paire $(\epsilon, \delta)$ pour les prendre pour $(C, \delta)$.)
+
+On parle aussi de petit $o$, grand $O$ pour les fonctions définies sur les entiers positifs et beaucoup plus.\\
+Cf.
+\href{https://github.com/phunc20/algorithms/tree/main/CLRS/ch03-growth\_of\_fn/01-asymptotic\_notation}{\texttt{https://github.com/phunc20/algorithms/tree/main/CLRS/ch03-growth\_of\_fn/01-asymptotic\_notation}}
+
+\end{document}
