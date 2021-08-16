@@ -49,25 +49,32 @@
 Soient $E$ et $F$ deux espace normés sur le corps $\mathbb{K} = \mathbb{R}$ ou $\mathbb{C}$
 et $R: E \to F$ une application quelconque. On dit
 \begin{itemize}
-  \item $R(h)$ est un petit $o$ de norme de $h$ puissance $k$, écrit $R(h) = o(\lVert h \rVert^{k}),$ si
+  \item $R(h)$ est un petit $o$ de norme de $h$ puissance $k$, écrit $R(h) = o(\norm{h}^{k}),$ si
     %$\forall \epsilon > 0 \exists \delta > 0$
     pour tout $\epsilon > 0$ il existe $\delta > 0$ tel que
     $$
-      \lVert h \rVert_{E} < \delta \quad\text{entraîne}\quad \lVert R(h) \rVert_{F} \le \epsilon \lVert h \rVert_{E}^{k}
+      \norm{h}_{E} < \delta \quad\text{entraîne}\quad \norm{R(h)}_{F} \le \epsilon \norm{h}_{E}^{k}
     $$
 
-  \item $R(h)$ est un grand $O$ de norme de $h$ puissance $k$, écrit $R(h) = O(\lVert h \rVert^{k}),$
+  \item $R(h)$ est un grand $O$ de norme de $h$ puissance $k$, écrit $R(h) = O(\norm{h}^{k}),$
     s'il existe $C > 0$ et $\delta > 0$ tels que
     $$
-      \lVert h \rVert_{E} < \delta \quad\text{entraîne}\quad \lVert R(h) \rVert_{F} \le C \lVert h \rVert_{E}^{k}
+      \norm{h}_{E} < \delta \quad\text{entraîne}\quad \norm{R(h)}_{F} \le C \norm{h}_{E}^{k}
     $$
 \end{itemize}
 
-En particulier, on a $R(h) = o(\lVert h \rVert^{k}) \implies R(h) = O(\lVert h \rVert^{k})\,.$ (Parce qu'il
-suffit de choisir n'importe quel paire $(\epsilon, \delta)$ pour les prendre pour $(C, \delta)$.)
+En particulier, on a
+$$
+R(h) = o(\norm{h}^{k}) \implies R(h) = O(\norm{h}^{k})\,
+$$
+puisqu'il suffit de choisir n'importe quelle paire $(\epsilon, \delta)$ et de la prendre pour $(C, \delta)$.
+Ou bien, si l'on se permet de prendre $o(\norm{h}^{k})$ et $O(\norm{h}^{k})$ pour des ensembles des fonctions
+satisfaisant les conditions ci-dessus, alors on a
+$$
+o(\norm{h}^{k}) \subseteq O(\norm{h}^{k})
+$$
 
-On parle aussi de petit $o$, grand $O$ pour les fonctions définies sur les entiers positifs et beaucoup plus.\\
-Cf.
-\href{https://github.com/phunc20/algorithms/tree/main/CLRS/ch03-growth\_of\_fn/01-asymptotic\_notation}{\texttt{https://github.com/phunc20/algorithms/tree/main/CLRS/ch03-growth\_of\_fn/01-asymptotic\_notation}}
+On parle aussi de petit $o$, grand $O$ pour les fonctions définies sur les entiers positifs.
+Cf. \href{https://github.com/phunc20/algorithms/tree/main/CLRS/ch03-growth\_of\_fn/01-asymptotic\_notation}{\texttt{github.com/phunc20/algorithms/.../01-asymptotic\_notation}}
 
 \end{document}
