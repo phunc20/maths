@@ -15,6 +15,8 @@ begin
   ])
   using PlutoUI
   using Plots
+  #plotly()
+  gr()
   using PlotlyJS
   using WebIO
 end
@@ -38,7 +40,7 @@ let
   y = .√(1 .- x.^2)
   y = [y; -y[2:end-1]]
   x = [x; x[2:end-1]]
-  scatter(x, y,
+  Plots.scatter(x, y,
     aspect_ratio=:equal,
     background_color=:black
   )
@@ -93,7 +95,7 @@ let
     hcat(y, -y[1:end, 2:end-1]),
   )
   pts = [u v] * coeff
-  scatter(
+  Plots.scatter(
     pts[1, 1:end],
     pts[2, 1:end],
     aspect_ratio=:equal,
@@ -114,7 +116,7 @@ let
     hcat(y, -y[1:end, 2:end-1]),
   )
   pts = T(coeff, basis)
-  scatter(
+  Plots.scatter(
     pts[1, 1:end],
     pts[2, 1:end],
     aspect_ratio=:equal,
@@ -140,7 +142,7 @@ let
     hcat(x, x[1:end, 2:end-1]),
     hcat(y, -y[1:end, 2:end-1]),
   )
-  plt = plot(
+  plt = Plots.plot(
     1,
     xlim = (-30, 30),
     ylim = (-30, 30),
@@ -176,7 +178,7 @@ let
     hcat(x, x[1:end, end-1:-1:2]),
     hcat(y, -y[1:end, end-1:-1:2]),
   )
-  plt = plot(
+  plt = Plots.plot(
     1,
     xlim=(-7, 7),
     ylim=(-7, 7),
@@ -205,7 +207,7 @@ let
     hcat(x, x[1:end, end-1:-1:2]),
     hcat(y, -y[1:end, end-1:-1:2]),
   )
-  plt = plot(
+  plt = Plots.plot(
     1,
     xlim=(-7, 7),
     ylim=(-7, 7),
@@ -264,12 +266,13 @@ let
   end
   basis = float(rand(-10:10, (3,3)))
   pts = T(coeff, basis)
-  scatter(
+  Plots.scatter(
     pts[1, 1:end],
     pts[2, 1:end],
     pts[3, 1:end],
     aspect_ratio=:equal,
-    background_color=:black
+    background_color=:black,
+    label=false,
   )
 end
 
@@ -300,11 +303,12 @@ let
   basis = float(rand(-10:10, (3,3)))
   pts = T(coeff, basis)
   #plotlyjs()
-  PlotlyJS.plot(PlotlyJS.scatter(
+  PlotlyJS.Plot(PlotlyJS.scatter3d(
     x=pts[1, 1:end],
     y=pts[2, 1:end],
     z=pts[3, 1:end],
-    #background_color=:black
+    height=400,
+    #width=900,
   ))
 end
 
