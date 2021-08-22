@@ -4,11 +4,27 @@
 using Markdown
 using InteractiveUtils
 
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
+macro bind(def, element)
+    quote
+        local el = $(esc(element))
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : missing
+        el
+    end
+end
+
 # ╔═╡ 0c45e9aa-e0ba-11eb-0f56-af8192849f70
 begin
   using Pkg
-  Pkg.add("PlutoUI")
+  Pkg.add([
+    "PlutoUI",
+    "Plots",
+  ])
   using PlutoUI
+  using Plots
+  #plotly()
+  #gr()
+  using Random
 end
 
 # ╔═╡ e840f8ca-4ed6-4839-baeb-312cc457e5be
@@ -21,9 +37,9 @@ When we study undergraduate maths, in particular, linear algebra, the symbol ``\
 > Why sometimes there is continuity and somtimes not in the notation of ``\mathscr{L}(E, F)``?
 
 Let's first read the following statement.
-> To define a norm on the space ``%\mathscr{L}(E, F)`` of linear transformations btw two vector spaces
-> ``E, F`` (both on ``\mathbb{R}`` or both on ``\mathbb{C}``), one way is
-> to equipe the vector spaces ``E`` and ``F`` with norms and the linear transformations with continuity.
+> To define a norm on the space ``%\mathscr{L}(E, F)`` of linear transformations from
+> ``E`` to ``F`` (both vector sapces on ``\mathbb{R}`` or both on ``\mathbb{C}``),
+> one way is to equipe the ``E`` and ``F`` with norms, and the linear transformations with continuity.
 >
 > In other words, the space of linear continuous transformations
 > ``%\mathscr{L}(E, F)`` admits a norm.
@@ -36,7 +52,7 @@ When we study calculus, we all have to learn the second derivative.
 Let us recall how the second derivative is introduced in an abstract setting.
 
 Let ``E, F`` be two normed vector spaces (We need norms to be able to speak of
-differentiability), and let ``f: U \subset E \to F`` be a function, where ``U`` is open in ``E\,.`` Then, by definition, ``f`` is differentiable at a point ``a \in U`` if there exists a linear transformation ``f'(a): E \to F`` s.t.
+differentiability), and let ``f: U \subset E \to F`` be a function, where ``U`` is open in ``E\,.`` (The term "_open_" simply means that, for every point ``a`` in ``U``, we are assured that every neighboring point of ``a``, provided close enough, lies also in ``U``.) Then, by definition, ``f`` is differentiable at a point ``a \in U`` if there exists a linear transformation ``f'(a): E \to F`` s.t.
 ```math
 \newcommand{\norm}[1]{\lVert{#1}\rVert}
 f(a + h) = f(a) + f'(a)(h) + o(\norm{h})\,,
@@ -101,7 +117,7 @@ The definition via ``\inf``  has some drawbacks. For example,
     ``\norm{T} = 0``, which implies ``T = 0``, the zero function.
     This is the drawback I mentioned: when ``T`` zeros out in some direction,
     ``T`` has to zero out in all directions in order for the ``\inf`` definition
-    to become a valid norm. This requires too much. Let alone saying
+    to become a valid norm. This is a strict requirement. Let alone saying
     requiring so much has not readily made the ``\inf`` definition a real norm.
     It was just a necessary condition.
 
@@ -111,9 +127,9 @@ Let's see if ``\inf``'s counterpart, the ``\sup`` definition, can make it until 
 # ╔═╡ 6e593c67-1d05-41ae-bee6-6b63605b28ef
 md"""
 ## ``\norm{T} := \sup_{\norm{x}=1} \norm{T(x)}``
-First of all, to be able to define like this, we must require that the set
+First of all, to be able to define the norm like this, we must require that the set
 ```math
-\left\{\,\norm{T(x)} \,\middle\vert\; \norm{x}=1\,\right\}
+\left\{\,T(x) \,\middle\vert\; \norm{x}=1\,\right\}
 ```
 be bounded. This is not automatic. Indeed, as we shall see, there exist linear functions that do not satisfy this.
 
@@ -171,6 +187,124 @@ T \;\text{continuous on}\; E\,.
 Those who don't believe may benefit from proving these implications by themselves.
 
 Note that, in general, ``V`` is a proper subset of the set of all linear functions from ``E`` to ``F``. That is to say, there exist discontinuous linear transformations. Cf. [Appendix B](## B. Examples of Discontinuous Linear Transformations)
+"""
+
+# ╔═╡ 1d65c197-3da7-49b8-a97b-95d69607e269
+md"""
+## Visualization
+Let's use our computer to help us visualize the situation better. More precisely, let's denote ``\Gamma = \left\{\,x \in \mathbb{R}^{n} \,\middle\vert\; \norm{x}=1\,\right\}``, where ``n = 2 \;\text{or}\; 3``, and try to plot the set ``T(\Gamma)`` for the following linear transformations:
+
+- ``T: \mathbb{R}^{2} \to \mathbb{R}^{2}``
+- ``T: \mathbb{R}^{3} \to \mathbb{R}^{3}``
+- ``T: \mathbb{R}^{3} \to \mathbb{R}^{2}``
+
+**Rmk.** One may adjust the values inside the next cell, and the following plots will change accordingly. (If one changes `Tu, Tv, Tw`, one'd better change `xlim, ylim` in the plot functions as well, so that one does not lose sight by focusing on the wrong region.)
+"""
+
+# ╔═╡ e3bee7b9-bb79-4473-8665-30066aeb1c53
+begin
+  Tu = [3. 4.]'
+  Tv = [-1. 0.]'
+  Tw = [1. -2.]'
+  n_angles = 30
+  md"""
+  `seed` = $(@bind seed Slider(0:42, show_value=true, default=15))
+  """
+end
+
+# ╔═╡ 50c79c60-f332-4c40-a32f-2de732842224
+function T(coeff, basis)
+  return basis * coeff
+end
+
+# ╔═╡ c6828156-9a1f-4dc5-8150-0d99972db825
+begin
+  ϵ = 1e-9
+  xy = zeros((2, n_angles))
+  for (col, θ) in enumerate(range(0+ϵ, 2π-ϵ; length=n_angles))
+    xy[1:end, col] = [cos(θ), sin(θ)]
+  end
+  pts22 = T(xy, [Tu Tv])
+end
+
+# ╔═╡ 3836840d-9a62-4b67-9d56-5f4347b55d75
+begin
+  xyz = zeros((3, n_angles^2))
+  counter = 1
+  for ϕ in range(0+ϵ, π-ϵ; length=n_angles), θ in range(0+ϵ, 2π-ϵ; length=n_angles)
+    xyz[1:end, counter] = [sin(ϕ)*cos(θ), sin(ϕ)*sin(θ), cos(ϕ)]
+    global counter += 1
+  end
+  Random.seed!(seed)
+  pts33 = T(xyz, float(rand(-10:10, (3,3))))
+end
+
+# ╔═╡ 6595c9d5-1005-498c-8aad-0ad07e90b4e0
+pts32 = T(xyz, [Tu Tv Tw])
+
+# ╔═╡ c5439555-3cd8-44a7-a4df-78810b381efd
+let
+  # stop
+  sct = Plots.scatter(
+    1,
+    xlim=(-7, 7),
+    ylim=(-7, 7),
+    aspect_ratio=:equal,
+    background_color=:black,
+    title="T: R² to R²",
+    #marker=2,
+    label=false,
+  )
+  @gif for col = 1:size(pts22, 2)
+    pt = pts22[1:end, col]
+    push!(sct, pt[1], pt[2])
+  end every 1
+end
+
+# ╔═╡ 01c4b8f1-709b-4a7f-ab5d-00e51949fd0b
+let
+  plt = Plots.plot3d(
+    1,
+    xlim=(-15, 15),
+    ylim=(-20, 20),
+    zlim=(-10, 10),
+    aspect_ratio=:equal,
+    background_color=:black,
+    title="T: R³ to R³",
+    label=false,
+  )
+  @gif for col in 1:size(pts33, 2)
+    push!(plt, pts33[1, col], pts33[2, col], pts33[3, col])
+  end every 5
+end
+
+# ╔═╡ 38dc587f-b10b-4c72-9d29-5487d2bfddba
+let
+  sct = Plots.scatter(
+    1,
+    xlim=(-7, 7),
+    ylim=(-7, 7),
+    aspect_ratio=:equal,
+    background_color=:black,
+    title="T: R³ to R²",
+    marker=3,
+    label=false,
+  )
+  @gif for col = 1:size(pts32, 2)
+    pt = pts32[1:end, col]
+    push!(sct, pt[1], pt[2])
+  end every 3
+end
+
+# ╔═╡ e3531807-65f0-4d0d-ab97-c6f21897c3a0
+md"""
+As we can see, ``T(\Gamma)`` is
+
+- **_ellipse_** in the case ``\,T: \mathbb{R}^{2} \to \mathbb{R}^{2}``
+- **_ellipsoid_** in the case ``\,T: \mathbb{R}^{3} \to \mathbb{R}^{3}``
+- **_something bounded_** in the case ``\,T: \mathbb{R}^{3} \to \mathbb{R}^{2}`` (Note that it is a **2D plot**, not a 3D one.)
+
+We observed a general elliptic pattern here. In fact, there exist techniques with which we can foresee that the result is ellipsoid in the case of ``T: \mathbb{R}^{n} \to \mathbb{R}^{n}``, e.g. Singular Value Decomposition (SVD). Uninformed but interested readers should refer to textbooks or the Internet, because SVD is out of scope of this article.
 """
 
 # ╔═╡ 5fa9dfdf-7ae3-42ac-a02c-b89afbdcad28
@@ -286,6 +420,16 @@ This completes the proof that ``T`` is continuous.
 # ╟─293031b4-e0bb-11eb-1f5b-9da7ddf56b6c
 # ╟─b65e4364-e0cf-11eb-0d0e-2f5418a1286a
 # ╟─6e593c67-1d05-41ae-bee6-6b63605b28ef
+# ╟─1d65c197-3da7-49b8-a97b-95d69607e269
+# ╠═e3bee7b9-bb79-4473-8665-30066aeb1c53
+# ╠═50c79c60-f332-4c40-a32f-2de732842224
+# ╟─c6828156-9a1f-4dc5-8150-0d99972db825
+# ╟─6595c9d5-1005-498c-8aad-0ad07e90b4e0
+# ╟─3836840d-9a62-4b67-9d56-5f4347b55d75
+# ╟─c5439555-3cd8-44a7-a4df-78810b381efd
+# ╟─01c4b8f1-709b-4a7f-ab5d-00e51949fd0b
+# ╟─38dc587f-b10b-4c72-9d29-5487d2bfddba
+# ╟─e3531807-65f0-4d0d-ab97-c6f21897c3a0
 # ╟─5fa9dfdf-7ae3-42ac-a02c-b89afbdcad28
 # ╟─1e673c5f-bd3d-4e5b-a094-e0dbee6c4f8d
 # ╟─04895de2-1f06-4a55-9989-9fa26505a744

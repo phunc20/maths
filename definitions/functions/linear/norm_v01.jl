@@ -252,6 +252,89 @@ I was so stupid as to forget the useful **_polar coordinate_**. Let's re-code th
 # ╔═╡ e7640a11-24c0-49e8-b31e-58e8b2cff272
 float(rand(-10:10, (2,2)))
 
+# ╔═╡ d82027bb-dfe0-4fa7-8406-5212b62ab757
+let
+  Tu = [3. 4.]'
+  Tv = [1. 0.]'
+  basis = [Tu Tv]
+  n_angles = 100
+  ϵ = 1e-9
+  #θ = range(0, 2π-ϵ; length=n_angles)
+  coeff = zeros((2, n_angles))
+  for (col, θ) in enumerate(range(0, 2π-ϵ; length=n_angles))
+    coeff[1:end, col] = [cos(θ), sin(θ)]
+  end
+  pts = T(coeff, basis)
+  plt = Plots.scatter(
+    1,
+    xlim=(-7, 7),
+    ylim=(-7, 7),
+    aspect_ratio=:equal,
+    background_color=:black,
+    title="Image of unit sphere in 2D",
+    marker=2,
+    label=false,
+  )
+  @gif for col = 1:size(coeff, 2)
+    pt = pts[1:end, col]
+    push!(plt, pt[1], pt[2])
+  end every 1
+end
+
+# ╔═╡ 212c258a-3542-48ea-8259-ce9b282e41c6
+md"""
+#### ``T: \mathbb{R}^3 \to \mathbb{R}^2``
+"""
+
+# ╔═╡ 50a2def3-affa-4396-9041-a93131ffc7bd
+let
+  Tu = [3. 4.]'
+  Tv = [-1. 0.]'
+  Tw = [1. -2.]'
+  basis = [Tu Tv Tw]
+  n_angles = 50
+  ϵ = 1e-9
+  coeff = zeros((3, n_angles^2))
+  counter = 1
+  for ϕ in range(0, π-ϵ; length=n_angles), θ in range(0, 2π-ϵ; length=n_angles)
+    coeff[1:end, counter] = [sin(ϕ)*cos(θ), sin(ϕ)*sin(θ), cos(ϕ)]
+    counter += 1
+  end
+  pts = T(coeff, basis)
+  size(pts)
+end
+
+# ╔═╡ b72db565-9c93-442f-8284-852c01af6f7b
+let
+  Tu = [3. 4.]'
+  Tv = [-1. 0.]'
+  Tw = [1. -2.]'
+  basis = [Tu Tv Tw]
+  n_angles = 50
+  ϵ = 1e-9
+  coeff = zeros((3, n_angles^2))
+  counter = 1
+  for ϕ in range(0, π-ϵ; length=n_angles), θ in range(0, 2π-ϵ; length=n_angles)
+    coeff[1:end, counter] = [sin(ϕ)*cos(θ), sin(ϕ)*sin(θ), cos(ϕ)]
+    counter += 1
+  end
+  pts = T(coeff, basis)
+  plt = Plots.scatter(
+    1,
+    xlim=(-7, 7),
+    ylim=(-7, 7),
+    aspect_ratio=:equal,
+    background_color=:black,
+    title="Image of unit sphere in 2D",
+    #marker=2,
+    label=false,
+  )
+  @gif for col = 1:size(coeff, 2)
+    pt = pts[1:end, col]
+    push!(plt, pt[1], pt[2])
+  end every 1
+end
+
 # ╔═╡ 07539502-d5ef-48a0-9f2f-ae740f0a6c01
 let
   #ρ = 1
@@ -342,37 +425,11 @@ let
   )
   @gif for col in 1:size(pts, 2)
     push!(sct, pts[1, col], pts[2, col], pts[3, col])
-  end every 3
+  end every 5
 end
 
 # ╔═╡ 6c790f78-464d-49c2-9621-d3677cd70d9e
-let
-  Tu = [3. 4.]'
-  Tv = [1. 0.]'
-  basis = [Tu Tv]
-  n_angles = 100
-  ϵ = 1e-9
-  θ = range(0, 2π-ϵ; length=n_angles)
-  coeff = zeros((2, n_angles))
-  for (col, θ) in enumerate(range(0, 2π-ϵ; length=n_angles))
-    coeff[1:end, col] = [cos(θ), sin(θ)]
-  end
-  pts = T(coeff, basis)
-  plt = Plots.scatter(
-    1,
-    xlim=(-7, 7),
-    ylim=(-7, 7),
-    aspect_ratio=:equal,
-    background_color=:black,
-    title="Image of unit sphere in 2D",
-    marker=2,
-    label=false,
-  )
-  @gif for col = 1:size(coeff, 2)
-    pt = pts[1:end, col]
-    push!(plt, pt[1], pt[2])
-  end every 1
-end
+
 
 # ╔═╡ Cell order:
 # ╠═0c45e9aa-e0ba-11eb-0f56-af8192849f70
@@ -396,6 +453,10 @@ end
 # ╠═f9729911-9fb6-499e-b1e3-4e60775a8f4f
 # ╟─b73ed7bc-4d9c-4f83-813e-9cf76ec602a8
 # ╠═e7640a11-24c0-49e8-b31e-58e8b2cff272
+# ╠═d82027bb-dfe0-4fa7-8406-5212b62ab757
+# ╟─212c258a-3542-48ea-8259-ce9b282e41c6
+# ╠═50a2def3-affa-4396-9041-a93131ffc7bd
+# ╠═b72db565-9c93-442f-8284-852c01af6f7b
 # ╠═07539502-d5ef-48a0-9f2f-ae740f0a6c01
 # ╟─f7b1407b-3c9a-4a66-ae2c-259fc6a2e1aa
 # ╠═a31dff2c-766c-4d52-8fb3-f9d058f310c3
