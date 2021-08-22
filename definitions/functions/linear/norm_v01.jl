@@ -312,6 +312,68 @@ let
   ))
 end
 
+# ╔═╡ 259744e6-4b87-43fb-ae9e-88e02c2c0f35
+md"""
+`PlotlyJS`'s 3D plot in this case is too small. Let's plot using `@gif` again.
+"""
+
+# ╔═╡ 03774574-6ebe-4146-875d-f654a88457c9
+let
+  #ρ = 1
+  n_angles = 50
+  ϵ = 1e-9
+  coeff = zeros((3, n_angles^2))
+  counter = 1
+  #for (i, ϕ) in enumerate(range(0, π-ϵ; length=n_angles)), (j, θ) in enumerate(range(0, 2π-ϵ; length=n_angles))
+  for ϕ in range(0, π-ϵ; length=n_angles), θ in range(0, 2π-ϵ; length=n_angles)
+    coeff[1:end, counter] = [sin(ϕ)*cos(θ), sin(ϕ)*sin(θ), cos(ϕ)]
+    counter += 1
+  end
+  basis = float(rand(-10:10, (3,3)))
+  pts = T(coeff, basis)
+  sct = Plots.plot3d(
+    1,
+    xlim=(-15, 15),
+    ylim=(-20, 20),
+    zlim=(-7, 7),
+    aspect_ratio=:equal,
+    background_color=:black,
+    label=false,
+  )
+  @gif for col in 1:size(pts, 2)
+    push!(sct, pts[1, col], pts[2, col], pts[3, col])
+  end every 3
+end
+
+# ╔═╡ 6c790f78-464d-49c2-9621-d3677cd70d9e
+let
+  Tu = [3. 4.]'
+  Tv = [1. 0.]'
+  basis = [Tu Tv]
+  n_angles = 100
+  ϵ = 1e-9
+  θ = range(0, 2π-ϵ; length=n_angles)
+  coeff = zeros((2, n_angles))
+  for (col, θ) in enumerate(range(0, 2π-ϵ; length=n_angles))
+    coeff[1:end, col] = [cos(θ), sin(θ)]
+  end
+  pts = T(coeff, basis)
+  plt = Plots.scatter(
+    1,
+    xlim=(-7, 7),
+    ylim=(-7, 7),
+    aspect_ratio=:equal,
+    background_color=:black,
+    title="Image of unit sphere in 2D",
+    marker=2,
+    label=false,
+  )
+  @gif for col = 1:size(coeff, 2)
+    pt = pts[1:end, col]
+    push!(plt, pt[1], pt[2])
+  end every 1
+end
+
 # ╔═╡ Cell order:
 # ╠═0c45e9aa-e0ba-11eb-0f56-af8192849f70
 # ╠═87226ee7-7adc-4fab-a86a-c242a85f14d2
@@ -338,3 +400,6 @@ end
 # ╟─f7b1407b-3c9a-4a66-ae2c-259fc6a2e1aa
 # ╠═a31dff2c-766c-4d52-8fb3-f9d058f310c3
 # ╠═0cedae98-fe16-47c9-a735-7c86af0c803a
+# ╟─259744e6-4b87-43fb-ae9e-88e02c2c0f35
+# ╠═03774574-6ebe-4146-875d-f654a88457c9
+# ╠═6c790f78-464d-49c2-9621-d3677cd70d9e
