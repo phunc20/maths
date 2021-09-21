@@ -21,6 +21,8 @@
 - **hiệu** `n.` kết quả của phép trừ: $3$ là hiệu của $5-2$.
 - **nghiệm** `n.` solution: nghiệm của một bài toán = solution to a problem
 - **cực tiểu**/**cực đại** = minimum/maximum
+- **hợp** `n.` composite (function): Hợp của hai hàm lồi là một hàm lồi.
+- **tối thiểu/tối đa** `v.tr.` minimize/maximize: tối thiểu một hàm $f$
 
 
 ### Set
